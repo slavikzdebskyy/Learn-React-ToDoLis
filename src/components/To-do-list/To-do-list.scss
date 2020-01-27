@@ -1,0 +1,22 @@
+.todo-list {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    width: 100%;
+    border-bottom: 2px solid #0000;
+  }
+
+  ul {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .list-item {
+    width: 100%;
+    border-bottom: 1px solid #cccc;
+  }
+}

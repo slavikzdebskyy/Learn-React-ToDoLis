@@ -1,0 +1,29 @@
+.item-container {
+  width: 100%;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: steelblue;
+
+  .item {
+    font-size: 21px;
+  }
+
+  .done {
+    text-decoration: line-through;
+  }
+
+  .close-btn {
+    border: none;
+    outline: none;
+    background-color: red;
+    color: white;
+    font-weight: 600;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+}
