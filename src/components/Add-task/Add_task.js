@@ -1,25 +1,33 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import './Add-task.scss';
 
+import Context from '../Contex';
 
- const AddTask = ({addTask}) => {
-   let value ='';
 
-   const removeTask = (event) => {
+
+ const AddTask = () => {
+  const { addTask } = useContext(Context);
+  const [ value, setValue ] = useState('');
+
+  const submit = (event) => {
+    event.preventDefault();
     addTask(value);
-    event.target.value = '';
-   }
+    setValue('');
+  }
 
   return (
     <div className="add-task-cont">
-      <input
-        className="input"
-        onChange={event => value = event.target.value}/>
-      <button 
-        className="add-btn"
-        onClick={event => removeTask(event)}>
-        Add
-      </button>
+      <form onSubmit={event => submit(event)}>
+        <input
+          className="input"
+          value={value}
+          onChange={({ target }) => setValue(target.value)}/>
+        <button
+          type="submit" 
+          className="add-btn">
+          Add
+        </button>
+      </form>
     </div>
   )
 };

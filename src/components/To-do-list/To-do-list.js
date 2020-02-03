@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Context from '../Contex';
 import ToDoItem from '../To-do-item/To-do-item';
@@ -27,9 +27,35 @@ const  makeId = (length) => {
   return result;
 }
 
+const getData = () => fetch('https://jsonplaceholder.typicode.com/todos')
+  .then(response => response.json())
+  .then(data => data.slice(0,5))      
+  .then(data => data.map(item => {
+    return {
+      id: item.id,
+      title: item.title,
+      isDone: item.comleted,
+    }
+  }))
+  .then(data => data.length ? data : null);
+     
+      
+
 const ToDoList = () => {
-  const [ tasksInState, setTasks ] = useState(JSON.parse(localStorage.getItem(LS_KEY)) || []);
-  const [ isLoading, setIsLoading ] = useState(false); 
+  const [ tasksInState, setTasks ] = useState([]);
+  const [ isLoading, setIsLoading ] = useState(true);  
+
+  useEffect(() => {
+    const  getTasks = async () => {
+      const data = await getData();
+      setTimeout(() => {
+        setTasks(data);
+        setIsLoading(false);
+      }, 1000)
+      
+    }
+    getTasks();
+  }, []);
 
   const updateState = tasks => {
     localStorage.setItem(LS_KEY, JSON.stringify(tasks));
@@ -40,7 +66,7 @@ const ToDoList = () => {
     const newTask = {
       id: makeId(7),
       title,
-      idDone: false,
+      isDone: false,
     };
     updateState([...tasksInState, newTask])
 
@@ -61,141 +87,45 @@ const ToDoList = () => {
     if(index < 0 ) {
       return;
     }
+
     const cloneTasks = [...tasksInState];
     cloneTasks[index].isDone = !cloneTasks[index].isDone;
-    updateState(cloneTasks);
-
-    setTasks(...cloneTasks)
-    localStorage.setItem(LS_KEY, JSON.stringify(cloneTasks));
-    
+    updateState(cloneTasks);    
   }
 
 
   return (
-    <div className='todo-list'>        
-      <AddTask addTask={addTask}/> 
-      <h3>
-        Tasks
-      </h3>
-      {isLoading ?
-        <div style={styles.loading}>
-          <div className="lds-dual-ring"></div> 
-        </div>
-      :
-        (tasksInState.length ? 
-          <ul>            
-            {tasksInState.map((task, index) => {
-              return (
-                <li 
-                  key={index} 
-                  className="list-item">
-                  <ToDoItem task={task} />
-                </li>            
-              )
-            })}
-          </ul>  
-        : 
-          <h3 style={styles.info}>No Tasks</h3>
-        )
-        }          
-    </div>
+    <Context.Provider value={{ removeTask, toggleDone, addTask }}>
+      <div className='todo-list'>        
+        <AddTask /> 
+        <h3>
+          Tasks
+        </h3>
+        {isLoading ?
+          <div style={styles.loading}>
+            <div className="lds-dual-ring"></div> 
+          </div>
+        :
+          (tasksInState.length ? 
+            <ul>            
+              {tasksInState.map((task, index) => {
+                return (
+                  <li 
+                    key={index} 
+                    className="list-item">
+                      <ToDoItem task={task} />
+                  </li>            
+                )
+              })}
+            </ul>  
+          : 
+            <h3 style={styles.info}>No Tasks</h3>
+          )
+          }          
+      </div>
+
+    </Context.Provider>
   );
 }
 
 export default ToDoList;
-
-
-// export default class ToDoList extends Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       tasks: JSON.parse(localStorage.getItem(LS_KEY)) || [],
-//       isLoading: true,
-//     }
-
-//     fetch('https://jsonplaceholder.typicode.com/todos')
-//       .then(response => response.json())
-//       .then(data => data.slice(0,5))      
-//       .then(data => data.map(item => {
-//         return {
-//           id: item.id,
-//           title: item.title,
-//           isDone: item.comleted,
-//         }
-//       }))
-//       .then(data => data.length ? data : null)
-//       .then(data => setTimeout( () => {
-//         this.setState({
-//           tasks: data || this.state.tasks,
-//           isLoading: false,
-//         })
-//         }, 3000)
-//       )
-      
-    
-//   }
-
-//   updateState = tasks => {
-//     localStorage.setItem(LS_KEY, JSON.stringify(tasks));
-//     this.setState({
-//       tasks,
-//     })
-//   }
-
-//   addTask = title => {
-//     const newTask = {
-//       id: makeId(7),
-//       title,
-//       idDone: false,
-//     };
-//     this.state.tasks.push(newTask);
-//     this.updateState(this.state.tasks);
-//   }
-
-//   removeTask = id => {
-//     const tasks = this.state.tasks.filter(task => task.id !== id);    
-//     this.updateState(tasks);
-//   }
-
-//   toggleDone = id => { 
-//     const index = this.state.tasks.findIndex(task => task.id === id);
-//     if(index < 0 ) {
-//       return;
-//     }
-//     const tasks = this.state.tasks;
-//     tasks[index].isDone = !tasks[index].isDone;
-//     this.updateState(tasks);
-//   }
-
-//   render(){
-//     return (
-//       <div className='todo-list'>
-        
-//         <AddTask addTask={this.addTask}/> 
-//         <h3>
-//           Tasks
-//         </h3>
-//         {this.state.isLoading ?
-//         <div style={styles.loading}>
-//           <div className="lds-dual-ring"></div> 
-//         </div>
-//           :
-//         (this.state.tasks.length ? 
-//           <ul>
-//             {this.state.tasks.map((task, index) => {
-//               return (
-//                 <li key={index} className="list-item">
-//                   <ToDoItem task={task} vydalennja={this.removeTask} toggleDone={this.toggleDone}/>
-//                 </li>            
-//               )
-//             })}
-//           </ul>  
-//         : 
-//         <h3 style={styles.info}>No Tasks</h3>)
-//         }
-             
-//       </div>
-//     )
-//   }; 
-
-// }
