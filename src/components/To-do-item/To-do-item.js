@@ -10,7 +10,7 @@ const ToDoItem = ({task, vydalennja, toggleDone}) =>(
     </span>
     <button 
       className="close-btn"
-      onClick={vydalennja.bind(null, task.id)}>
+      onClick={() => vydalennja(task.id)}>
       X
     </button>
   </div>
