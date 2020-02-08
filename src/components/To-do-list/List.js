@@ -2,6 +2,7 @@ import React from "react";
 
 import ToDoItem from '../To-do-item/To-do-item';
 import './To-do-list.scss';
+import { connect } from "react-redux";
 
 
 const styles = {
@@ -25,4 +26,10 @@ const List = ({ tasks }) => (
     <h3 style={styles}>No Tasks</h3>
 )
 
-export default List;
+const mapStateToProps = state => {
+  return {
+    tasks: state.toDoList,
+  }
+} 
+
+export default connect(mapStateToProps)(List);

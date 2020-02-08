@@ -3,6 +3,9 @@ import './App.scss';
 
 import Header from './components/header/Header';
 import ToDoList from './components/To-do-list/To-do-list';
+import { Provider } from 'react-redux';
+
+import store from './redux/create.store';
 
 export default class App extends React.Component {
   // eslint-disable-next-line no-useless-constructor
@@ -11,11 +14,14 @@ export default class App extends React.Component {
   } 
   
   render() {
-    return ( 
+    return (
+      <Provider store={store}>
         <div className="container">
           <Header />
           <ToDoList />
-        </div>            
+        </div>
+      </Provider>
+                    
     );
   }
 }

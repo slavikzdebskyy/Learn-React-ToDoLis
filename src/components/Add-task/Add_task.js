@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import './Add-task.scss';
 
-import Context from '../Contex';
+import { addNewTaskAction } from '../../redux/actions';
+import { connect } from 'react-redux';
 
 
 
- const AddTask = () => {
-  const { addTask } = useContext(Context);
+ const AddTask = ({addTaskRedux}) => {
   const [ value, setValue ] = useState('');
 
   const submit = (event) => {
     event.preventDefault();
-    addTask(value);
     setValue('');
+    addTaskRedux(value);
   }
 
   return (
@@ -32,4 +32,8 @@ import Context from '../Contex';
   )
 };
 
-export default AddTask;
+const mapDispatchToProps = dispatch => ({
+  addTaskRedux: title => dispatch(addNewTaskAction(title))
+})
+
+export default connect(null, mapDispatchToProps)(AddTask);
