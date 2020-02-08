@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 import Context from '../Contex';
-import ToDoItem from '../To-do-item/To-do-item';
+import List from './List';
 import AddTask from '../Add-task/Add_task';
+import Loader from './Loader';
 import './To-do-list.scss';
 
 const LS_KEY = 'TASKS';
-
-const styles = {
-  info: {
-    textAlign: 'center'
-  },
-  loading: {
-    with: '100%',
-    textAlign: 'center'
-  }
-}
 
 const  makeId = (length) => {
   let result = '';
@@ -34,7 +25,7 @@ const getData = () => fetch('https://jsonplaceholder.typicode.com/todos')
     return {
       id: item.id,
       title: item.title,
-      isDone: item.comleted,
+      isDone: item.completed,
     }
   }))
   .then(data => data.length ? data : null);
@@ -48,11 +39,9 @@ const ToDoList = () => {
   useEffect(() => {
     const  getTasks = async () => {
       const data = await getData();
-      setTimeout(() => {
-        setTasks(data);
-        setIsLoading(false);
-      }, 1000)
-      
+      console.log(data);
+      setTasks(data);
+      setIsLoading(false);      
     }
     getTasks();
   }, []);
@@ -101,29 +90,9 @@ const ToDoList = () => {
         <h3>
           Tasks
         </h3>
-        {isLoading ?
-          <div style={styles.loading}>
-            <div className="lds-dual-ring"></div> 
-          </div>
-        :
-          (tasksInState.length ? 
-            <ul>            
-              {tasksInState.map((task, index) => {
-                return (
-                  <li 
-                    key={index} 
-                    className="list-item">
-                      <ToDoItem task={task} />
-                  </li>            
-                )
-              })}
-            </ul>  
-          : 
-            <h3 style={styles.info}>No Tasks</h3>
-          )
-          }          
+        
+        { isLoading ? <Loader/> : <List tasks={tasksInState}/> }          
       </div>
-
     </Context.Provider>
   );
 }
