@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
+import {connect} from "react-redux";
 import './To-do-item.scss';
 
-import Context from '../Contex';
 import { TaskContext } from '../To-do-item/To-do-item';
+import toggleTaskAction from "../../store/actions/toggle-task.action";
 
-const ToggleItem = () => {
-  const { toggleDone } = useContext(Context);
+const ToggleItem = ({toggleDone}) => {
   const { task } = useContext(TaskContext);
   return (
     <span 
@@ -14,6 +14,10 @@ const ToggleItem = () => {
       { task.title }
     </span>
   )
-}
+};
 
-export default ToggleItem;
+const mapDispatchToProps = dispatch => ({
+  toggleDone: id => dispatch(toggleTaskAction(id))
+});
+
+export default connect(null, mapDispatchToProps)(ToggleItem);

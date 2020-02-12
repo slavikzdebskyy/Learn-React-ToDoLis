@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
+import {connect} from "react-redux";
+
 import './To-do-item.scss';
-
-import Context from '../Contex';
 import { TaskContext } from '../To-do-item/To-do-item';
+import removeTaskAction from "../../store/actions/remove-task.action";
 
-const RemoveItem = () => {
-  const { removeTask } = useContext(Context);
+const RemoveItem = ({removeTask}) => {
   const { taskId } = useContext(TaskContext);
 
   return (
@@ -15,6 +15,10 @@ const RemoveItem = () => {
     X
   </button>
   )
-}
+};
 
-export default RemoveItem;
+const mapDispatchToProps = dispatch => ({
+  removeTask: id => dispatch(removeTaskAction(id))
+});
+
+export default connect(null, mapDispatchToProps)(RemoveItem);
