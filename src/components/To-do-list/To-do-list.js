@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {connect} from "react-redux";
 
 import List from './List';
@@ -6,11 +6,6 @@ import AddTask from '../Add-task/Add_task';
 import Loader from './Loader';
 import './To-do-list.scss';
 import initTasksAction from "../../store/actions/init-todos.action";
-
-
-
-
-
 
 const ToDoList = ({todos, initTodos, isLoading}) => {
   useEffect(() => initTodos(), []);

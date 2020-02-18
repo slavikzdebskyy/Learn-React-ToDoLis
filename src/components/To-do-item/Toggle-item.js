@@ -10,14 +10,14 @@ const ToggleItem = ({toggleDone}) => {
   return (
     <span 
       className= {`item ${task.isDone ? 'done' : ''}`} 
-      onClick={() => toggleDone(task.id)}>
+      onClick={() => toggleDone(task)}>
       { task.title }
     </span>
   )
 };
 
 const mapDispatchToProps = dispatch => ({
-  toggleDone: id => dispatch(toggleTaskAction(id))
+  toggleDone: task => dispatch(toggleTaskAction(task))
 });
 
 export default connect(null, mapDispatchToProps)(ToggleItem);
