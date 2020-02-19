@@ -12,8 +12,12 @@ import { connect } from 'react-redux';
   const submit = (event) => {
     event.preventDefault();
     setValue('');
-    addTaskRedux(value);
-  }
+    const task = {
+      title: value,
+      isDone: false,
+    };
+    addTaskRedux(task);
+  };
 
   return (
     <div className="add-task-cont">

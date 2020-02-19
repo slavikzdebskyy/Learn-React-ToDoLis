@@ -1,13 +1,14 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { connect } from 'react-redux';
 
 import List from './List';
 import AddTask from '../Add-task/Add_task';
 import Loader from './Loader';
-import './To-do-list.scss';  
+import './To-do-list.scss';
+import {initTasksAction} from "../../redux/actions";
 
-const ToDoList = ({ toDoList, isLoading }) => {
-
+const ToDoList = ({ isLoading, initTodos }) => {
+  useEffect(() => initTodos(), [initTodos]);
   return (
       <div className='todo-list'>        
         <AddTask /> 
@@ -27,4 +28,8 @@ const mapStateToProps = ({ toDoList, isLoading }) => {
   }
 }
 
-export default connect(mapStateToProps)(ToDoList);
+const mapDispatchToProps = () => dispatch => ({
+  initTodos: () => dispatch(initTasksAction()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToDoList);
